@@ -16,7 +16,7 @@
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-        <input type="hidden" name="_target_path" value="/register">
+        <input type="hidden" name="_target_path" value="/profile">
 
         <button type="submit" >login</button>
         <a href={{ path('app_register') }}>Register</a>

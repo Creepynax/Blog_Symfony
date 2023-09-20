@@ -4,9 +4,8 @@
 
 {% block body %}
     <h1>Mon Profil</h1>
-    {% if user is defined %}
+    {% if is_granted('ROLE_USER') %}
         <p>Bienvenue, {{ user.email }} !</p>
-        <!-- Affichez d'autres informations du profil ici -->
     {% else %}
         <p>Veuillez vous connecter pour accéder à votre profil.</p>
     {% endif %}
