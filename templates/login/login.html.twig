@@ -1,8 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{# ... #}
-
 {% block body %}
+
+    {% for message in app.flashes('message') %}
+        {{ message }}
+    {% endfor %}
+
     {% if error %}
         <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
@@ -15,11 +18,11 @@
         <input type="password" id="password" name="_password">
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
         <input type="hidden" name="_target_path" value="/register">
 
         <button type="submit" >login</button>
         <a href={{ path('app_register') }}>Register</a>
         <a href={{ path('app_logout') }}>Logout</a>
+
     </form>
 {% endblock %}
