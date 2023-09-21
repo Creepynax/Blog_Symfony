@@ -1,12 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Articles{% endblock %}
+
 {% block body %}
-    <h1>Mes Articles</h1>
-    <ul>
-    {% for article in articles %}
-        <li>
-            {{ article.title }} 
-            <a href="{{ path('article_delete', {'id': article.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article?');">Supprimer</a>
-            <a href="{{ path('article_edit', {'id': article.id}) }}">Modifier</a>
-        </li>
-    {% endfor %}
-    </ul>
+    <div class="container mt-4">
+        <h1>Liste des Articles</h1>
+        
+        <div class="text-right mb-3">
+            <a href="{{ path('article_new') }}" class="btn btn-success">Créer un article</a>
+        </div>
+    
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Titre</th>
+                    <th>Résumé</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for article in pagination %}
+                    <tr>
+                        <td>{{ article.id }}</td>
+                        <td>{{ article.title }}</td>
+                        <td>{{ article.summary|slice(0, 140) ~ '(...)' }}</td>
+                        <td>
+                            <a href="{{ path('article_show', {'id': article.id}) }}" class="btn btn-primary">Voir</a>
+                            <a href="{{ path('article_edit', {'id': article.id}) }}" class="btn btn-warning">Modifier</a>
+                            <a href="{{ path('article_delete', {'id': article.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article?');">Supprimer</a>
+                            <form action="{{ path('article_delete', {'id': article.id}) }}" method="post" style="display: inline;">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div class="pagination">   
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    </div>
 {% endblock %}
