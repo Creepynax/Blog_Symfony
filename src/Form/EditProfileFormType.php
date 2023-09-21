@@ -37,7 +37,7 @@ class EditProfileFormType extends AbstractType
                     new Length([
                         'min' => 8,
                         'minMessage' => 'Le mot de passe doit faire au moins {{ limit }} caractères.',
-                        'max' => 4096,
+                        'max' => 255,
                     ])
                 ],
             ])
