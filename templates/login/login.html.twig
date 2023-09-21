@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <h1>Login</h1>
 
     {% for message in app.flashes('message') %}
         {{ message }}
@@ -10,19 +11,18 @@
         <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
-    <form action="{{ path('app_login') }}" method="post">
-        <label for="username">Email:</label>
-        <input type="text" id="username" name="_username" value="{{ last_username }}">
+    <div id="form_login">
+        <form action="{{ path('app_login') }}" method="post">
+            <label for="username">Email:</label>
+            <input type="text" id="username" name="_username" value="{{ last_username }}">
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="_password">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="_password">
 
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-        <input type="hidden" name="_target_path" value="/register">
-
-        <button type="submit" >login</button>
-        <a href={{ path('app_register') }}>Register</a>
-        <a href={{ path('app_logout') }}>Logout</a>
-
-    </form>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            <input type="hidden" name="_target_path" value="/">
+            <button type="submit" class="btn btn-primary">login</button>
+            <a href={{ path('app_register') }} class="btn btn-secondary">Register</a>
+        </form>
+    </div>
 {% endblock %}
