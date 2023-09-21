@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\ArticleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
@@ -13,29 +12,32 @@ class Article
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: "string", length: 255)]
     private ?string $title = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: "text")]
     private ?string $summary = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: "text")]
     private ?string $content = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: "string", length: 255)]
     private ?string $slug = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: "string", length: 255)]
     private ?string $image = null;
+
+    #[ORM\Column(type: "datetime")]
+    private ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'article')]
+    #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'articles')]
     private Collection $tags;
 
     public function __construct()
@@ -53,7 +55,7 @@ class Article
         return $this->title;
     }
 
-    public function setTitle(string $title): static
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
 
@@ -65,7 +67,7 @@ class Article
         return $this->summary;
     }
 
-    public function setSummary(string $summary): static
+    public function setSummary(?string $summary): self
     {
         $this->summary = $summary;
 
@@ -77,7 +79,7 @@ class Article
         return $this->content;
     }
 
-    public function setContent(string $content): static
+    public function setContent(?string $content): self
     {
         $this->content = $content;
 
@@ -89,7 +91,7 @@ class Article
         return $this->slug;
     }
 
-    public function setSlug(string $slug): static
+    public function setSlug(?string $slug): self
     {
         $this->slug = $slug;
 
@@ -101,9 +103,21 @@ class Article
         return $this->image;
     }
 
-    public function setImage(string $image): static
+    public function setImage(?string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(?\DateTimeInterface $date): self
+    {
+        $this->date = $date;
 
         return $this;
     }
@@ -113,7 +127,7 @@ class Article
         return $this->user;
     }
 
-    public function setUser(?User $user): static
+    public function setUser(?User $user): self
     {
         $this->user = $user;
 
@@ -128,21 +142,20 @@ class Article
         return $this->tags;
     }
 
-    public function addTag(Tag $tag): static
+    public function addTag(Tag $tag): self
     {
         if (!$this->tags->contains($tag)) {
-            $this->tags->add($tag);
+            $this->tags[] = $tag;
             $tag->addArticle($this);
         }
 
         return $this;
     }
 
-    public function removeTag(Tag $tag): static
+    public function removeTag(Tag $tag): self
     {
-        if ($this->tags->removeElement($tag)) {
-            $tag->removeArticle($this);
-        }
+        $this->tags->removeElement($tag);
+        $tag->removeArticle($this);
 
         return $this;
     }

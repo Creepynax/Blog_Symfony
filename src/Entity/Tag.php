@@ -19,11 +19,11 @@ class Tag
     private ?string $name = null;
 
     #[ORM\ManyToMany(targetEntity: Article::class, inversedBy: 'tags')]
-    private Collection $article;
+    private Collection $articles; // Modifier le nom de la propriété en $articles
 
     public function __construct()
     {
-        $this->article = new ArrayCollection();
+        $this->articles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -46,15 +46,15 @@ class Tag
     /**
      * @return Collection<int, Article>
      */
-    public function getArticle(): Collection
+    public function getArticles(): Collection // Modifier le nom de la méthode en getArticles
     {
-        return $this->article;
+        return $this->articles;
     }
 
     public function addArticle(Article $article): static
     {
-        if (!$this->article->contains($article)) {
-            $this->article->add($article);
+        if (!$this->articles->contains($article)) {
+            $this->articles->add($article);
         }
 
         return $this;
@@ -62,9 +62,8 @@ class Tag
 
     public function removeArticle(Article $article): static
     {
-        $this->article->removeElement($article);
+        $this->articles->removeElement($article);
 
         return $this;
     }
-
 }

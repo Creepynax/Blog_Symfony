@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Tags{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Liste des Tags</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Nombre d'Articles</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <th>Actions</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for tag in tags %}
+            <tr>
+                <td>{{ tag.id }}</td>
+                <td>{{ tag.name }}</td>
+                <td>{{ tag.articles.count }}</td>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <td>
+                        <a href="{{ path('tag_show', {'id': tag.id}) }}" class="btn btn-primary">Voir</a>
+                        <a href="{{ path('tag_edit', {'id': tag.id}) }}" class="btn btn-warning">Modifier</a>
+                        <form action="{{ path('tag_delete', {'id': tag.id}) }}" method="post" style="display: inline;">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tag.id) }}">
+                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                        </form>
+                    </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
