@@ -7,7 +7,11 @@
         <h1>Liste des Articles</h1>
         
         <div class="text-right mb-3">
-            <a href="{{ path('article_new') }}" class="btn btn-success">Créer un article</a>
+            {% if is_granted('ROLE_USER') or is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('article_new') }}" class="btn btn-success">Créer un article</a>
+            {% else %}
+                <a href="{{ path('app_register') }}" class="btn btn-success">Créer un article</a>
+            {% endif %}
         </div>
     
         <table class="table">
@@ -26,14 +30,20 @@
                         <td>{{ article.title }}</td>
                         <td>{{ article.summary|slice(0, 140) ~ '(...)' }}</td>
                         <td>
-                            <a href="{{ path('article_show', {'id': article.id}) }}" class="btn btn-primary">Voir</a>
-                            <a href="{{ path('article_update', {'id': article.id}) }}" class="btn btn-warning">Modifier</a>
-                            <a href="{{ path('article_delete', {'id': article.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article?');">Supprimer</a>
-                            <form action="{{ path('article_delete', {'id': article.id}) }}" method="post" style="display: inline;">
-                                <input type="hidden" name="_method" value="DELETE">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
-                                <button type="submit" class="btn btn-danger">Supprimer</button>
-                            </form>
+                            {% if is_granted('ROLE_USER') or is_granted('ROLE_ADMIN') %}
+                                <a href="{{ path('article_show', {'id': article.id}) }}" class="btn btn-primary">Voir</a>
+                                <a href="{{ path('article_update', {'id': article.id}) }}" class="btn btn-warning">Modifier</a>
+                            {% else %}
+                                <a href="{{ path('app_register') }}" class="btn btn-primary">Voir</a>
+                                <a href="{{ path('app_register') }}" class="btn btn-warning">Modifier</a>
+                            {% endif %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <form action="{{ path('article_delete', {'id': article.id}) }}" method="post" style="display: inline;">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+                                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                                </form>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

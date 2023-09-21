@@ -38,7 +38,7 @@
                             {% endif %}
                         </li>
                         {% if is_granted('ROLE_ADMIN') %}
-                            <a class="nav-link" href="#">Tags</a>
+                            <a class="nav-link" href="{{ path('tag_index') }}">Tags</a>
                         {% endif %}
                     </ul>
                     <form class="d-flex" role="search">

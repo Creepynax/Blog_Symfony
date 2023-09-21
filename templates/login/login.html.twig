@@ -1,19 +1,28 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Login</h1>
+    <div class="container mt-4">
 
-    {% if error %}
-        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+        <h1>Login</h1>
 
-    <div id="form_login">
+        {% if error %}
+            <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
         <form action="{{ path('app_login') }}" method="post">
-            <label for="username">Email:</label>
-            <input type="text" id="username" name="_username" value="{{ last_username }}">
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="_password">
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" name="_username" value="{{ last_username }}">
+            </div>
+
+            <div class="mb-3">
+                <label for="inputPassword5" class="form-label">Password</label>
+                <input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock" name="_password">
+                <div id="passwordHelpBlock" class="form-text">
+                    Your password must be 8-255 characters long.
+                </div>
+            </div>
 
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
             <input type="hidden" name="_target_path" value="/">
