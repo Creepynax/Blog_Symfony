@@ -4,18 +4,17 @@ namespace App\Form;
 
 use App\Entity\Article;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType; // Import de la classe EntityType
-use App\Entity\User; // Import de la classe User
-use App\Entity\Tag; // Import de la classe Tag
 
 class ArticleType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('title', TextType::class)
@@ -23,22 +22,31 @@ class ArticleType extends AbstractType
             ->add('content', TextareaType::class)
             ->add('slug', TextType::class)
             ->add('image', FileType::class, [
-                'required' => false, // Permet de ne pas rendre le champ obligatoire
+                'label' => 'Image (fichier JPEG)',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new \Symfony\Component\Validator\Constraints\File([
+                        'maxSize' => '2040k',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                        ],
+                        'mimeTypesMessage' => 'Veuillez télécharger une image valide.',
+                    ])
+                ],
             ])
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'username', // Remplacez par le champ de l'utilisateur que vous souhaitez afficher
+            ->add('date', DateTimeType::class, [
+                'widget' => 'single_text',
+                'html5' => true,
+                'data' => new \DateTime(), // Assurez-vous que la date par défaut est un objet DateTime
             ])
-            ->add('tags', EntityType::class, [
-                'class' => Tag::class,
-                'choice_label' => 'name', // Remplacez par le champ du tag que vous souhaitez afficher
-                'multiple' => true, // Permet de sélectionner plusieurs tags
-                'expanded' => true, // Affiche les tags sous forme de cases à cocher
-            ])
-        ;
+            ->add('save', SubmitType::class, [
+                'label' => 'Créer un article'
+            ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Article::class,

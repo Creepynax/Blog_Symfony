@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Controller;
-
 use App\Entity\Article;
 use App\Form\ArticleType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -9,6 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Knp\Component\Pager\PaginatorInterface;
 
 
@@ -38,8 +41,7 @@ class ArticleController extends AbstractController
         ]);
     }
 
-
-    #[Route('/{id}', name: 'article_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'article_show', methods: ['GET'], requirements:['id' => '\d+'])]
     public function show(Article $article): Response
     {
         // Rend la vue affichant un article spécifique
@@ -49,12 +51,19 @@ class ArticleController extends AbstractController
     }
 
     #[Route('/new', name: 'article_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $doctrine): Response
+    #[IsGranted("ROLE_USER")] // Assurez-vous que l'utilisateur est authentifié pour créer un article
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        // Obtenez l'utilisateur actuellement connecté (assurez-vous d'avoir la configuration de sécurité appropriée)
+        $user = $this->getUser();
+
         // Crée une nouvelle instance de la classe Article
         $article = new Article();
 
-        // Crée un formulaire pour l'entité Article
+        // Attribuez l'utilisateur à l'article
+        $article->setUser($user);
+
+        // Créez un formulaire pour l'entité Article
         $form = $this->createForm(ArticleType::class, $article);
 
         // Traite la soumission du formulaire
@@ -62,10 +71,29 @@ class ArticleController extends AbstractController
 
         // Vérifie si le formulaire a été soumis et est valide
         if ($form->isSubmitted() && $form->isValid()) {
-            // Récupère le gestionnaire d'entités et persiste l'article en base de données
-            $entityManager = $doctrine->getManager();
+            // Gérer le fichier téléchargé
+            $file = $form['image']->getData();
+            if ($file) {
+                $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = uniqid() . '.' . $file->guessExtension();
+
+                try {
+                    $file->move(
+                        $this->getParameter('images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // Gérer l'exception si quelque chose se passe mal pendant le téléchargement du fichier
+                }
+
+                $article->setImage($newFilename);
+            }
+
             $entityManager->persist($article);
             $entityManager->flush();
+
+            // Ajouter un message Flash pour indiquer le succès
+            $this->addFlash('success', 'Article créé avec succès.');
 
             // Redirige vers la liste des articles après la création
             return $this->redirectToRoute('article_index');
