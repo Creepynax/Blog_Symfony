@@ -19,7 +19,23 @@ class Article
     private ?string $title = null;
 
     #[ORM\Column(type: 'text')]
+    private ?string $summary = null;
+
+    #[ORM\Column(type: 'text')]
     private ?string $content = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
+
+    #[ORM\Column(type: 'datetime')]
+    private ?\DateTimeInterface $date = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
     #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'articles')]
     private Collection $tags;
@@ -46,6 +62,18 @@ class Article
         return $this;
     }
 
+    public function getSummary(): ?string
+    {
+        return $this->summary;
+    }
+
+    public function setSummary(string $summary): static
+    {
+        $this->summary = $summary;
+
+        return $this;
+    }
+
     public function getContent(): ?string
     {
         return $this->content;
@@ -54,6 +82,54 @@ class Article
     public function setContent(string $content): static
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(\DateTimeInterface $date): static
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

@@ -27,7 +27,7 @@
                         <td>{{ article.summary|slice(0, 140) ~ '(...)' }}</td>
                         <td>
                             <a href="{{ path('article_show', {'id': article.id}) }}" class="btn btn-primary">Voir</a>
-                            <a href="{{ path('article_edit', {'id': article.id}) }}" class="btn btn-warning">Modifier</a>
+                            <a href="{{ path('article_update', {'id': article.id}) }}" class="btn btn-warning">Modifier</a>
                             <form action="{{ path('article_delete', {'id': article.id}) }}" method="post" style="display: inline;">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
