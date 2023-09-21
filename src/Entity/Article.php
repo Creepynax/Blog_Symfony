@@ -31,6 +31,9 @@ class Article
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $date = null;
+
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
@@ -108,6 +111,18 @@ class Article
         return $this;
     }
 
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(\DateTimeInterface $date): self
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
     public function getUser(): ?User
     {
         return $this->user;
@@ -118,6 +133,11 @@ class Article
         $this->user = $user;
 
         return $this;
+    }
+
+    public function getUserId(): ?int
+    {
+        return $this->user ? $this->user->getId() : null;
     }
 
     /**
@@ -147,3 +167,4 @@ class Article
         return $this;
     }
 }
+
