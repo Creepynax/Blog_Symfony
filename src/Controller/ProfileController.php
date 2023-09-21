@@ -3,7 +3,8 @@
 namespace App\Controller;
 
 use App\Form\EditProfileFormType;
-use Doctrine\ORM\EntityManagerInterface; // Import the EntityManagerInterface
+
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,11 +12,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProfileController extends AbstractController
 {
-    private EntityManagerInterface $entityManager; // Declare the EntityManagerInterface
+    private EntityManagerInterface $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager; // Inject the EntityManagerInterface
+        $this->entityManager = $entityManager;
     }
 
     #[Route('/profile', name: 'app_profile')]
@@ -33,7 +34,8 @@ class ProfileController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $this->entityManager->flush(); // Use the injected EntityManagerInterface
+
+                $this->entityManager->flush();
                 $this->addFlash('success', 'Votre profil a été mis à jour');
                 return $this->redirectToRoute('app_profile');
             }
