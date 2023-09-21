@@ -16,8 +16,8 @@ class EditProfileFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('newEmail')
-            ->add('newPassword', RepeatedType::class, [
+            ->add('email')
+            ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe ne correspondent pas.',
                 'mapped' => false,
