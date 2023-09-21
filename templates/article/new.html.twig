@@ -1,19 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Créer l'Article "{{ article.title }}"{% endblock %}
+{% block title %}Créer l'Article {{ article.title }}{% endblock %}
 
 {% block body %}
     <div class="container mt-4">
-        <h1>Créer l'Article "{{ article.title }}"</h1>
+        <h1>Créer un article {{ article.title }}</h1>
         
         {{ form_start(form) }}
         {{ form_widget(form) }}
-        
-        <div class="text-center mt-3">
-            <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
-            <a href="{{ path('article_index') }}" class="btn btn-secondary">Annuler</a>
-        </div>
-        
         {{ form_end(form) }}
     </div>
 {% endblock %}

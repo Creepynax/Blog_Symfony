@@ -9,12 +9,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Knp\Component\Pager\PaginatorInterface;
-
+use App\Repository\ArticleRepository;
 
 #[Route('/article')]
 class ArticleController extends AbstractController
@@ -33,7 +31,7 @@ class ArticleController extends AbstractController
         $pagination = $paginator->paginate(
             $query, // Requête Doctrine
             $request->query->getInt('page', 1), // Numéro de page
-            1 // Nombre d'articles par page
+            5 // Nombre d'articles par page
         );
 
         // Rend la vue listant tous les articles avec pagination
@@ -42,7 +40,7 @@ class ArticleController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'article_show', methods: ['GET'], requirements:['id' => '\d+'])]
+    #[Route('/{id}', name: 'article_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(Article $article): Response
     {
         // Rend la vue affichant un article spécifique
@@ -107,42 +105,60 @@ class ArticleController extends AbstractController
         ]);
     }
 
-    #[Route('/update', name: 'article_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Article $article, EntityManagerInterface $doctrine): Response
+    #[Route('/update/{id}', name: 'article_update', methods: ['GET', 'POST'])]
+    #[IsGranted("ROLE_USER")]
+    public function update(Request $request, int $id, ArticleRepository $articleRepository, EntityManagerInterface $entityManager): Response
     {
-        // Crée un formulaire pour modifier l'article existant
-        $form = $this->createForm(ArticleType::class, $article);
+        // Récupérer l'article par son ID
+        $article = $articleRepository->find($id);
 
-        // Traite la soumission du formulaire
+        if (!$article) {
+            throw $this->createNotFoundException("L'article avec l'ID $id n'existe pas.");
+        }
+
+        // Déterminez si vous êtes en mode mise à jour
+        $isUpdate = true;
+
+        // Créer le formulaire de modification
+        $form = $this->createForm(ArticleType::class, $article, [
+            'is_update' => $isUpdate, // Passez 'is_update' comme option au formulaire
+        ]);
+
+        // Traiter la soumission du formulaire
         $form->handleRequest($request);
 
-        // Vérifie si le formulaire a été soumis et est valide
         if ($form->isSubmitted() && $form->isValid()) {
-            // Récupère le gestionnaire d'entités et met à jour l'article en base de données
-            $doctrine->getManager()->flush();
+            // Aucun besoin de persister l'article car il est déjà géré par Doctrine
+            $entityManager->flush();
 
-            // Redirige vers la liste des articles après la modification
+            $this->addFlash('success', 'Article modifié avec succès.');
             return $this->redirectToRoute('article_index');
         }
-        // Rend la vue pour modifier l'article
-        return $this->render('article/edit.html.twig', [
+
+        return $this->render('article/update.html.twig', [
             'article' => $article,
             'form' => $form->createView(),
         ]);
     }
 
-    #[Route('/delete/{id}', name: 'article_delete', methods: ['DELETE'])]
-    public function delete(Request $request, Article $article, EntityManagerInterface $doctrine): Response
+    #[Route('/delete/{id}', name: 'article_delete', methods: ['POST'])]
+    public function delete(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
-        // Vérifie si le jeton CSRF est valide pour la suppression de l'article
-        if ($this->isCsrfTokenValid('delete'.$article->getId(), $request->request->get('_token'))) {
-            // Récupère le gestionnaire d'entités et supprime l'article de la base de données
-            $entityManager = $doctrine->getManager();
+        // Vérifiez si le jeton CSRF est valide (pour éviter les attaques CSRF)
+        if ($this->isCsrfTokenValid('delete' . $article->getId(), $request->request->get('_token'))) {
+            // Supprimez l'article de la base de données
             $entityManager->remove($article);
             $entityManager->flush();
+
+            // Ajoutez un message Flash pour indiquer le succès de la suppression
+            $this->addFlash('success', 'Article supprimé avec succès.');
+        } else {
+            // Ajoutez un message Flash en cas de jeton CSRF invalide
+            $this->addFlash('error', 'Échec de la suppression de l\'article. Jeton CSRF invalide.');
         }
 
-        // Redirige vers la liste des articles après la suppression
+        // Redirigez vers la liste des articles après la suppression
         return $this->redirectToRoute('article_index');
     }
+
 }
