@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block body %}
+    <h1>Mon Profil</h1>
+    {% if is_granted('ROLE_USER') %}
+        <p>Bienvenue, {{ user.email }} !</p>
+    {% else %}
+        <p>Veuillez vous connecter pour accéder à votre profil.</p>
+    {% endif %}
+{% endblock %}
