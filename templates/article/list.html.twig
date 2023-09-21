@@ -1,0 +1,12 @@
+{% block body %}
+    <h1>Mes Articles</h1>
+    <ul>
+    {% for article in articles %}
+        <li>
+            {{ article.title }} 
+            <a href="{{ path('article_delete', {'id': article.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article?');">Supprimer</a>
+            <a href="{{ path('article_edit', {'id': article.id}) }}">Modifier</a>
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}

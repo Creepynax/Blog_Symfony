@@ -1,5 +1,21 @@
-{% block title %}Création d'article{% endblock %}
-
 {% block body %}
+<h1>Création d'Articles</h1>
     {{ form(form) }}
 {% endblock %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tagsInput = document.querySelector('.tags-input');
+        const addButton = document.createElement('button');
+        addButton.textContent = 'Ajouter un Tag';
+        addButton.addEventListener('click', function () {
+            const newTag = prompt('Saisissez un nouveau tag :');
+            if (newTag) {
+                if (tagsInput.value) {
+                    tagsInput.value += ', ';
+                }
+                tagsInput.value += newTag;
+            }
+        });
+        tagsInput.parentNode.appendChild(addButton);
+    });
+</script>

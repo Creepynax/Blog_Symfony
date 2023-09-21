@@ -5,5 +5,25 @@ controllers:
     type: attribute
 
 article_create:
+    path: /article/create
+    controller: App\Controller\ArticleController::create
+
+create_article: # nouvelle route
     path: /create-article
     controller: App\Controller\ArticleController::create
+
+articles_by_user:
+    path: /article/user/{userId}
+    controller: App\Controller\ArticleController::showByUser
+
+my_articles:
+    path: /article/my-articles
+    controller: App\Controller\ArticleController::showMyArticles
+
+article_delete:
+    path: /article/delete/{id}
+    controller: App\Controller\ArticleController::delete
+
+article_edit:
+    path: /article/edit/{id}
+    controller: App\Controller\ArticleController::edit
