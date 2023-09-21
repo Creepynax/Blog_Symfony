@@ -5,12 +5,17 @@
 namespace App\Controller;
 
 use App\Entity\Tag;
+use App\Entity\Article;
 use App\Form\TagType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\TagRepository;
+
+
+
 
 #[Route('/tag')]
 class TagController extends AbstractController
@@ -25,7 +30,7 @@ class TagController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'tag_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'tag_show', methods: ['GET'], condition: "params['id'] < 1000", requirements: ['id' => '\d+'])]
     public function show(Tag $tag): Response
     {
         return $this->render('tag/show.html.twig', [
@@ -34,25 +39,35 @@ class TagController extends AbstractController
     }
 
     #[Route('/new', name: 'tag_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $doctrine): Response
-    {
-        $tag = new Tag();
-        $form = $this->createForm(TagType::class, $tag);
-        $form->handleRequest($request);
+public function new(Request $request, EntityManagerInterface $entityManager): Response
+{
+    // Crée une nouvelle instance de la classe Tag
+    $tag = new Tag();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $doctrine->getManager();
-            $entityManager->persist($tag);
-            $entityManager->flush();
+    // Crée un formulaire pour l'entité Tag
+    $form = $this->createForm(TagType::class, $tag);
 
-            return $this->redirectToRoute('tag_index');
-        }
+    // Traite la soumission du formulaire
+    $form->handleRequest($request);
 
-        return $this->render('tag/new.html.twig', [
-            'tag' => $tag,
-            'form' => $form->createView(),
-        ]);
+    // Vérifie si le formulaire a été soumis et est valide
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->persist($tag);
+        $entityManager->flush();
+
+        // Ajouter un message Flash pour indiquer le succès
+        $this->addFlash('success', 'Tag créé avec succès.');
+
+        // Redirige vers la liste des tags après la création
+        return $this->redirectToRoute('tag_index');
     }
+
+    // Rend la vue pour créer un nouveau tag
+    return $this->render('tag/new.html.twig', [
+        'tag' => $tag,
+        'form' => $form->createView(),
+    ]);
+}
 
     #[Route('{id}/edit', name: 'tag_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Tag $tag, EntityManagerInterface $doctrine): Response
