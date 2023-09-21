@@ -8,10 +8,14 @@
     {{ form_errors(registrationForm) }}
 
     {{ form_start(registrationForm) }}
+    <div class="mb-3">
         {{ form_row(registrationForm.email) }}
+    </div>
+    <div class="mb-3">
         {{ form_row(registrationForm.plainPassword, {
             label: 'Password'
         }) }}
+    </div>
         {{ form_row(registrationForm.agreeTerms) }}
 
         <button type="submit" class="btn btn-primary">Register</button>

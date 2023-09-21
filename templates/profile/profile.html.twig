@@ -6,8 +6,8 @@
     <h1>Mon Profil</h1>
     {% if is_granted('ROLE_USER') %}
         <p>Bienvenue, {{ user.email }} !</p>
-        <a href={{ path('app_edit_profile') }}>Modifier mon profil</a>
-        <a href={{ path('app_logout') }}>Logout</a>
+        <a href={{ path('app_edit_profile') }} class="btn btn-danger">Modifier mon profil</a>
+        <a href={{ path('app_logout') }} class="btn btn-secondary">Logout</a>
     {% else %}
         <p>Veuillez vous connecter pour accéder à votre profil.</p>
     {% endif %}
