@@ -1,17 +1,5 @@
-{% block title %}Création d'article{% endblock %} {# Titre de la page #}
+{% block title %}Création d'article{% endblock %}
 
-{% block body %} {# Début du contenu de la page #}
-    {{ form(form)}} 
-{% endblock %} {# Fin du contenu de la page #}
-
-{% block javascripts %}
-    {# Calling "parent" on a template that does not extend nor "use" another template is forbidden. #}
-    {# Remove the following line: {{ parent() }} #}
-    <script>
-        function generateSlug() {
-            var title = document.getElementById('title').value;
-            var slug = title.toLowerCase().replace(/ /g, '-');
-            document.getElementById('slug').value = slug;
-        }
-    </script>
+{% block body %}
+    {{ form(form) }}
 {% endblock %}

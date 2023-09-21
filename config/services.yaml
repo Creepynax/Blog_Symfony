@@ -6,7 +6,7 @@
 parameters:
     locale: 'en'
     app_locales: en|fr
-    brochures_directory: 'media/posts'
+    images_directory: 'media/posts'
 
 services:
     # default configuration for services in *this* file
