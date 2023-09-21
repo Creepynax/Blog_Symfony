@@ -5,9 +5,19 @@
 {% block body %}
     <h1>Mon Profil</h1>
     {% if is_granted('ROLE_USER') %}
-        <p>Bienvenue, {{ user.email }} !</p>
-        <a href={{ path('app_edit_profile') }}>Modifier mon profil</a>
-        <a href={{ path('app_logout') }}>Logout</a>
+        {% if not editMode %}
+            <p>Email: {{ user.email }}</p>
+            <a href="{{ path('app_edit_profile', {'edit': true}) }}">Éditer</a>
+        {% else %}
+            <form method="post" action="{{ path('app_edit_profile') }}">
+                <label>
+                    <input type="email" name="email" value="{{ user.email }}" required>
+                </label>
+                <button type="submit">OK</button>
+                <a href="{{ path('app_profile') }}">Annuler</a>
+            </form>
+        {% endif %}
+        <a href="{{ path('app_logout') }}">Logout</a>
     {% else %}
         <p>Veuillez vous connecter pour accéder à votre profil.</p>
     {% endif %}
