@@ -54,6 +54,17 @@ class ArticleForm extends AbstractType
             ->add('date', DateTimeType::class, [
                 'widget' => 'single_text'
             ])
+            ->add('tags', TextType::class, [
+                'mapped' => false,
+                'required' => false,
+                'label' => 'Tags (séparés par des virgules)',
+            ])
+            ->add('addTag', SubmitType::class, [
+                'label' => 'Ajouter un Tag',
+                'attr' => [
+                    'class' => 'add-tag-button',
+                ],
+            ])
             ->add('save', SubmitType::class, [
                 'label' => 'Créer un article'
             ]);
@@ -66,3 +77,4 @@ class ArticleForm extends AbstractType
         ]);
     }
 }
+

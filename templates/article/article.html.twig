@@ -1,5 +1,48 @@
 {% block title %}Création d'article{% endblock %}
 
 {% block body %}
-    {{ form(form) }}
+    {{ form_start(form) }}
+    
+    {{ form_row(form.title) }}
+    {{ form_row(form.summary) }}
+    {{ form_row(form.content) }}
+    {{ form_row(form.slug) }}
+    {{ form_row(form.image) }}
+    {{ form_row(form.date) }}
+
+    <div id="tag-container">
+        {{ form_row(form.tags, { 'attr': {'style': 'display:none;'} }) }}
+    </div>
+
+    <button type="button" class="add-tag-button">Ajouter un Tag</button>
+
+    {{ form_row(form.save) }}
+
+    {{ form_end(form) }}
+    
+    <script>
+        // Supposons que vous ayez un conteneur HTML avec l'ID "tag-container" pour contenir les champs de saisie de tags.
+        const tagContainer = document.getElementById('tag-container');
+
+        // Supposons que vous ayez un champ de saisie de tags caché pour cloner.
+        const hiddenTagInput = document.querySelector('input[name="article_form[tags][]"]');
+        hiddenTagInput.style.display = 'none';
+
+        // Supposons que vous ayez un bouton "Ajouter un Tag" avec la classe "add-tag-button".
+        const addTagButton = document.querySelector('.add-tag-button');
+        addTagButton.addEventListener('click', () => {
+            const newTagInput = document.createElement('input');
+            newTagInput.type = 'text';
+            newTagInput.name = 'article_form[tags][]'; // Notez les crochets pour créer un tableau de tags.
+
+            // Ajoutez un séparateur entre les tags, par exemple un point-virgule.
+            if (hiddenTagInput.value) {
+                hiddenTagInput.value += ';';
+            }
+
+            // Ajoutez le champ de saisie de tag au conteneur.
+            tagContainer.appendChild(newTagInput);
+        });
+    </script>
+</body>
 {% endblock %}
