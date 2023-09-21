@@ -16,7 +16,15 @@ class EditProfileFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email')
+            ->add('currentPassword', PasswordType::class, [
+                'invalid_message' => "L'ancien mot de passe est invalide.",
+                'mapped' => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter your current password',
+                    ]),
+                ],
+            ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe ne correspondent pas.',
@@ -24,7 +32,7 @@ class EditProfileFormType extends AbstractType
                 'required' => false,
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password',
+                        'message' => 'Please enter a new password',
                     ]),
                     new Length([
                         'min' => 8,
@@ -35,6 +43,7 @@ class EditProfileFormType extends AbstractType
             ])
         ;
     }
+
 
     public function configureOptions(OptionsResolver $resolver): void
     {
