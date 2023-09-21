@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Form\ArticleForm;
 use App\Repository\UserRepository;
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -21,7 +22,7 @@ class ArticleController extends AbstractController
     {
         $article = new Article();
 
-        // Utilisez l'ID utilisateur 7 par défaut
+        // Utiliser l'ID utilisateur 7 par défaut
         $user = $userRepository->find(7);
         if (!$user) {
             throw new \Exception('Utilisateur avec ID = 7 non trouvé');
@@ -32,6 +33,10 @@ class ArticleController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Slugifier le titre
+            $slugify = new Slugify();
+            $article->setSlug($slugify->slugify($article->getTitle()));
+
             // Gérer le fichier téléchargé
             $file = $form['image']->getData();
             if ($file) {
