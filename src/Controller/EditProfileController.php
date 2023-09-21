@@ -13,12 +13,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class EditProfileController extends AbstractController
 {
-    #[Route('/editProfile', name: 'app_edit_profile')]
-    public function index(
-        Request $request,
-        UserPasswordHasherInterface $passwordHasher,
-        EntityManagerInterface $entityManager
-    ): Response {
+    #[Route('/editPassword', name: 'app_edit_password')]
+    public function index(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    {
         $form = $this->createForm(EditProfileFormType::class, $this->getUser());
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -29,7 +26,7 @@ class EditProfileController extends AbstractController
                 $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
             }
             $entityManager->flush();
-            $this->addFlash('success', 'Votre profil a été mis à jour');
+            $this->addFlash('succes', 'Votre mot de passe a été mis à jour');
         }
         return $this->render('edit_profile/editProfile.html.twig', [
             'form' => $form->createView(),

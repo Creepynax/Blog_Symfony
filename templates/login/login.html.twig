@@ -3,10 +3,6 @@
 {% block body %}
     <h1>Login</h1>
 
-    {% for message in app.flashes('message') %}
-        {{ message }}
-    {% endfor %}
-
     {% if error %}
         <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}

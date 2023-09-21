@@ -1,4 +1,6 @@
-{% block content %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
     <div class="section">
 
     <div class="content">
@@ -9,7 +11,7 @@
 
         {{ form_row(form.plainPassword.second, { label: 'Confirmez le mot de passe:' }) }}
 
-        <button type="submit" class="button is-fullwidth is-primary">Mettre à jour</button>
+        <button type="submit" class="btn btn-danger">Mettre à jour</button>
         {{ form_end(form) }}
 
     </div>

@@ -3,9 +3,16 @@
 {% block title %}Mon Profil{% endblock %}
 
 {% block body %}
+    {% for succes in app.flashes('succes') %}
+        <div class="alert alert-success" role="alert">
+            {{ succes }}
+        </div>
+    {% endfor %}
     <h1>Mon Profil</h1>
-    {% if is_granted('ROLE_USER') %}
+    {% if is_granted('ROLE_USER') or is_granted('ROLE_ADMIN')%}
         <p>Bienvenue, {{ user.email }} !</p>
+        <a href={{ path('app_edit_password') }} class="btn btn-danger">Edit password</a>
+        <a href={{ path('app_logout') }} class="btn btn-secondary">Logout</a>
     {% else %}
         <p>Veuillez vous connecter pour accéder à votre profil.</p>
     {% endif %}
