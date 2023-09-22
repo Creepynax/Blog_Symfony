@@ -135,7 +135,7 @@ class ArticleController extends AbstractController
             $entityManager->flush();
     
             $this->addFlash('success', 'Article modifié avec succès');
-            return $this->redirectToRoute('article_index');
+            return $this->redirectToRoute('app_home');
         }
   
         return $this->render('article/update.html.twig', [
@@ -162,7 +162,7 @@ class ArticleController extends AbstractController
         }
 
         // Redirigez vers la liste des articles après la suppression
-        return $this->redirectToRoute('article_index');
+        return $this->redirectToRoute('app_home');
     }
 
 }

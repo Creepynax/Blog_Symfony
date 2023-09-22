@@ -25,15 +25,19 @@ class ArticleType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'attr' => ['class' => 'form-control', 'placeholder' => 'Titre'],
+                'label' => 'Titre',
             ])
             ->add('summary', TextareaType::class, [
                 'attr' => ['class' => 'form-control', 'placeholder' => 'Résumé'],
+                'label' => 'Résumé',
             ])
             ->add('content', TextareaType::class, [
                 'attr' => ['class' => 'form-control', 'placeholder' => 'Contenu'],
+                'label' => 'Contenu',
             ])
             ->add('slug', TextType::class, [
                 'attr' => ['class' => 'form-control', 'placeholder' => 'URL'],
+                'label' => 'Slug',
             ])
             ->add('image', FileType::class, [
                 'label' => 'Image (fichier JPEG)',
