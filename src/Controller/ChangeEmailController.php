@@ -32,6 +32,7 @@ class ChangeEmailController extends AbstractController
             $user->setEmail($emailEmail);
             $entityManager->flush();
             $this->addFlash('success', 'Votre email a été mis à jour');
+          
             return $this->redirectToRoute('app_profile');
         }
         return $this->render('profil/changeEmail.html.twig', [

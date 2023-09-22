@@ -38,7 +38,7 @@ class ArticleForm extends AbstractType
                     new \Symfony\Component\Validator\Constraints\File([
                         'maxSize' => '2040k',
                         'mimeTypes' => ['image/jpeg', 'image/png'],
-                        'mimeTypesMessage' => 'Veuillez télécharger une image valide.',
+                        'mimeTypesMessage' => 'Veuillez télécharger une image valide',
                     ]),
                 ],
             ])

@@ -16,7 +16,7 @@ class LoginController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
 
 
-        $this->addFlash('message', "Vous avez bien été connecté");
+        $this->addFlash('success', "Vous avez bien été connecté");
 
         return $this->render('login/login.html.twig', [
             'error'         => $error,

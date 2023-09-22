@@ -3,36 +3,22 @@
 {% block title %}Mon Profil{% endblock %}
 
 {% block body %}
+
     {% for success in app.flashes('success') %}
         <div class="alert alert-success" role="alert">
             {{ success }}
         </div>
     {% endfor %}
 
-    <h1>Mon Profil</h1>
-
-    {% if is_granted('ROLE_USER') %}
-        {% if not editMode %}
+    <div class="container mt-4">
+        <h1>Mon Profil</h1>
+        {% if is_granted('ROLE_USER') %}
             <p>Email: {{ user.email }}</p>
-            <a href="{{ path('app_change_email', {'edit': true}) }}"><i class="fas fa-envelope"></i>Éditer l'email</a>
-            <a href="{{ path('app_edit_password', {'edit': true}) }}"><i class="fas fa-user-edit"></i>Éditer le mot de passe</a>
-            <div class="form-group">
-                <a href="{{ path('app_delete_profile') }}" class="btn btn-danger">Supprimer mon profil</a>
-            </div>
-        {% else %}
-            <form method="post" action="{{ path('app_edit_profile') }}">
-                {{ form_start(form) }}
-                <div class="form-group">
-                    {{ form_label(form.email, 'Email') }}
-                    {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
-                </div>
-                <button type="submit" class="btn btn-primary">Mettre à jour</button>
-                <a href="{{ path('app_profile') }}" class="btn btn-secondary">Annuler</a>
-                {{ form_end(form) }}
-            </form>
+            <a href="{{ path('app_change_email') }}" class="btn btn-primary">Modifier l'email</a>
+            <a href="{{ path('app_edit_password') }}" class="btn btn-danger">Modifier le mot de passe</a>
+            <a href="{{ path('app_logout') }}" class="btn btn-secondary">Se déconnecter</a>
         {% endif %}
-        <a href="{{ path('app_logout') }}" class="btn btn-danger"><i class="fas fa-sign-out-alt"></i> Se déconnecter</a>
-
+    </div>
         {% if articles is not empty %}
             <h2>Mes Articles</h2>
             <table class="table">
@@ -63,7 +49,5 @@
         {% else %}
             <p>Vous n'avez pas encore publié d'articles.</p>
         {% endif %}
-    {% else %}
-        <p>Veuillez vous connecter pour accéder à votre profil.</p>
     {% endif %}
 {% endblock %}

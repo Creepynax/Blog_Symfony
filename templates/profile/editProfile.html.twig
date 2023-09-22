@@ -1,4 +1,4 @@
-{% extends '../base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block body %}
     <div class="container mt-4">
@@ -18,7 +18,7 @@
         </div>
 
         <button type="submit" class="btn btn-danger">Mettre à jour</button>
-        <a href="{{ path('app_profile') }}" class=btn-secondary>Retour au profil</a>
+        <a href={{ path('app_profile') }} class="btn btn-secondary">Retour au profil</a>
         {{ form_end(form) }}
     </div>
 {% endblock %}

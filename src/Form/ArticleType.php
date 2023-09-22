@@ -46,7 +46,7 @@ class ArticleType extends AbstractType
                             'image/jpeg',
                             'image/png',
                         ],
-                        'mimeTypesMessage' => 'Veuillez télécharger une image valide.',
+                        'mimeTypesMessage' => 'Veuillez télécharger une image valide',
                     ])
                 ],
                 'attr' => ['class' => 'form-control'],

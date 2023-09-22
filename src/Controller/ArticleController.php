@@ -98,7 +98,7 @@ class ArticleController extends AbstractController
             $this->addFlash('success', 'Article créé avec succès.');
 
             // Redirige vers la liste des articles après la création
-            return $this->redirectToRoute('article_index');
+            return $this->redirectToRoute('app_home');
         }
 
         // Rend la vue pour créer un nouvel article
@@ -116,7 +116,7 @@ class ArticleController extends AbstractController
         $article = $articleRepository->find($id);
     
         if (!$article) {
-            throw $this->createNotFoundException("L'article avec l'ID $id n'existe pas.");
+            throw $this->createNotFoundException("L'article avec l'ID $id n'existe pas");
         }
     
         // Déterminez si vous êtes en mode mise à jour
@@ -134,7 +134,7 @@ class ArticleController extends AbstractController
             // Aucun besoin de persister l'article car il est déjà géré par Doctrine
             $entityManager->flush();
     
-            $this->addFlash('success', 'Article modifié avec succès.');
+            $this->addFlash('success', 'Article modifié avec succès');
             return $this->redirectToRoute('article_index');
         }
   
@@ -155,10 +155,10 @@ class ArticleController extends AbstractController
             $entityManager->flush();
 
         // Ajoutez un message Flash pour indiquer le succès de la suppression
-        $this->addFlash('success', 'Article supprimé avec succès.');
+        $this->addFlash('success', 'Article supprimé avec succès');
         } else {
         // Ajoutez un message Flash en cas de jeton CSRF invalide
-        $this->addFlash('error', 'Échec de la suppression de l\'article. Jeton CSRF invalide.');
+        $this->addFlash('error', 'Échec de la suppression de l\'article. Jeton CSRF invalide');
         }
 
         // Redirigez vers la liste des articles après la suppression
