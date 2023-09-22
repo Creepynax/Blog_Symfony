@@ -32,4 +32,13 @@ class ArticleRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findByTitle(string $searchTerm)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.title LIKE :searchTerm')
+            ->setParameter('searchTerm', '%' . $searchTerm . '%')
+            ->getQuery()
+            ->getResult();
+    }
 }

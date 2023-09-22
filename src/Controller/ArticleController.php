@@ -161,4 +161,17 @@ class ArticleController extends AbstractController
         return $this->redirectToRoute('article_index');
     }
 
+    #[Route('/search', name: 'article_search', methods: ['GET'])]
+    public function search(Request $request, ArticleRepository $articleRepository): Response
+    {
+        // Récupérez le terme de recherche depuis la requête
+        $searchTerm = $request->query->get('q');
+
+        // Utilisez le Repository Article pour rechercher les articles par titre
+        $articles = $articleRepository->findByTitle($searchTerm);
+
+        return $this->render('navBar/navBar.html.twig', [
+            'articles' => $articles,
+        ]);
+    }
 }
