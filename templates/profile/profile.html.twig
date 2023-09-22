@@ -15,6 +15,9 @@
             <p>Email: {{ user.email }}</p>
             <a href="{{ path('app_change_email', {'edit': true}) }}">Éditer l'email</a>
             <a href="{{ path('app_edit_password', {'edit': true}) }}">Éditer le mot de passe</a>
+            <div class="form-group">
+                <a href="{{ path('app_delete_profile') }}" class="btn btn-danger">Supprimer mon profil</a>
+            </div>
         {% else %}
             <form method="post" action="{{ path('app_edit_profile') }}">
                 <label>
