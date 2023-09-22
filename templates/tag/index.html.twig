@@ -4,7 +4,7 @@
 
 {% block body %}
 <div class="container mt-4">
-    <h1 class="mb-4">Liste des Tags</h1>
+    <h1 class="mb-4">Catégories</h1>
     
     <!-- Bouton "Ajouter" avec lien vers la page d'ajout de tag -->
     <a href="{{ path('tag_new') }}" class="btn btn-success mb-3">Ajouter</a>
@@ -12,10 +12,9 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Nom</th>
                 <th>Nombre d'Articles</th>
-                {% if is_granted('ROLE_ADMIN') %}
+                {% if is_granted('ROLE_USER') %}
                     <th>Actions</th>
                 {% endif %}
             </tr>
@@ -23,17 +22,15 @@
         <tbody>
             {% for tag in tags %}
             <tr>
-                <td>{{ tag.id }}</td>
                 <td>{{ tag.name }}</td>
                 <td>{{ tag.articles.count }}</td>
-                {% if is_granted('ROLE_ADMIN') %}
+                {% if is_granted('ROLE_USER') %}
                     <td>
-                        <a href="{{ path('tag_show', {'id': tag.id}) }}" class="btn btn-primary">Voir</a>
-                        <a href="{{ path('tag_edit', {'id': tag.id}) }}" class="btn btn-warning">Modifier</a>
+                        <a href="{{ path('tag_update', {'id': tag.id}) }}" class="btn btn-warning fa-solid fa-pen-to-square"></a>
                         <form action="{{ path('tag_delete', {'id': tag.id}) }}" method="post" style="display: inline;">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tag.id) }}">
-                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                            <button type="submit" class="btn btn-danger fa fa-trash"></button>
                         </form>
                     </td>
                 {% endif %}
