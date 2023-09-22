@@ -10,21 +10,56 @@
     {% endfor %}
 
     <h1>Mon Profil</h1>
+
     {% if is_granted('ROLE_USER') %}
         {% if not editMode %}
             <p>Email: {{ user.email }}</p>
-            <a href="{{ path('app_change_email', {'edit': true}) }}">Éditer l'email</a>
-            <a href="{{ path('app_edit_profile', {'edit': true}) }}">Éditer le mot de passe</a>
+            <a href="{{ path('app_change_email', {'edit': true}) }}"><i class="fas fa-envelope"></i> Éditer l'email</a>
+            <a href="{{ path('app_edit_password', {'edit': true}) }}"><i class="fas fa-user-edit"></i> Éditer le profil</a>
         {% else %}
             <form method="post" action="{{ path('app_edit_profile') }}">
-                <label>
-                    <input type="email" name="email" value="{{ user.email }}" required>
-                </label>
-                <button type="submit">OK</button>
-                <a href="{{ path('app_profile') }}">Annuler</a>
+                {{ form_start(form) }}
+                <div class="form-group">
+                    {{ form_label(form.email, 'Email') }}
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                <a href="{{ path('app_profile') }}" class="btn btn-secondary">Annuler</a>
+                {{ form_end(form) }}
             </form>
         {% endif %}
-        <a href="{{ path('app_logout') }}">Se déconnecter</a>
+        <a href="{{ path('app_logout') }}" class="btn btn-danger"><i class="fas fa-sign-out-alt"></i> Se déconnecter</a>
+
+        {% if articles is not empty %}
+            <h2>Mes Articles</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Résumé</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for article in articles %}
+                        <tr>
+                            <td><a href="{{ path('article_show', {'id': article.id}) }}">{{ article.title }}</a></td>
+                            <td>{{ article.summary|slice(0, 140) ~ '(...)' }}</td>
+                            <td>
+                                <a href="{{ path('article_update', {'id': article.id}) }}" class="btn btn-warning"><i class="fas fa-pen"></i></a>
+                                <form action="{{ path('article_delete', {'id': article.id}) }}" method="post" style="display: inline;">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+                                    <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Vous n'avez pas encore publié d'articles.</p>
+        {% endif %}
     {% else %}
         <p>Veuillez vous connecter pour accéder à votre profil.</p>
     {% endif %}
