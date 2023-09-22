@@ -37,7 +37,7 @@ class EditProfileController extends AbstractController
             }
         }
 
-        return $this->render('edit_profile/editProfile.html.twig', [
+        return $this->render('profile/editProfile.html.twig', [
             'form' => $form->createView(),
         ]);
     }

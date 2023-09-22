@@ -9,23 +9,15 @@
         </div>
     {% endfor %}
 
-    <h1>Mon Profil</h1>
-    {% if is_granted('ROLE_USER') %}
-        {% if not editMode %}
+    <div class="container mt-4">
+        <h1>Mon Profil</h1>
+        {% if is_granted('ROLE_USER') %}
             <p>Email: {{ user.email }}</p>
-            <a href="{{ path('app_change_email', {'edit': true}) }}">Éditer l'email</a>
-            <a href="{{ path('app_edit_profile', {'edit': true}) }}">Éditer le mot de passe</a>
+            <a href="{{ path('app_change_email') }}" class="btn btn-primary">Modifier l'email</a>
+            <a href="{{ path('app_edit_password') }}" class="btn btn-danger">Modifier le mot de passe</a>
+            <a href="{{ path('app_logout') }}" class="btn btn-secondary">Se déconnecter</a>
         {% else %}
-            <form method="post" action="{{ path('app_edit_profile') }}">
-                <label>
-                    <input type="email" name="email" value="{{ user.email }}" required>
-                </label>
-                <button type="submit">OK</button>
-                <a href="{{ path('app_profile') }}">Annuler</a>
-            </form>
+            <p>Veuillez vous connecter pour accéder à votre profil.</p>
         {% endif %}
-        <a href="{{ path('app_logout') }}">Se déconnecter</a>
-    {% else %}
-        <p>Veuillez vous connecter pour accéder à votre profil.</p>
-    {% endif %}
+    </div>
 {% endblock %}

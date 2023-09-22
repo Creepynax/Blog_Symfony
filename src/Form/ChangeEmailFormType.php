@@ -16,6 +16,7 @@ class ChangeEmailFormType extends AbstractType
         $builder
             ->add('newEmail', EmailType::class, [
                 'mapped' => false,
+                'attr' => ['class' => 'form-control'],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Entrez un email',

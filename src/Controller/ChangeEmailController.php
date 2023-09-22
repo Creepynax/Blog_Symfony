@@ -33,7 +33,7 @@ class ChangeEmailController extends AbstractController
         } else {
             $this->addFlash('error', 'Mot de passe actuel incorrect');
         }
-        return $this->render('change_email/changeEmail.html.twig', [
+        return $this->render('profile/changeEmail.html.twig', [
             'form' => $form->createView(),
         ]);
     }

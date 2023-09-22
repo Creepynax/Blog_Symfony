@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Modification de l'email</h1>
+
+        {{ form_start(form) }}
+
+        <div class="mb-3">
+            {{ form_row(form.newEmail, { label: 'Changez votre email:' }) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Mettre à jour</button>
+        <a href={{ path('app_profile') }} class="btn btn-secondary">Retour au profil</a>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
