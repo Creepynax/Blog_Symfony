@@ -14,7 +14,7 @@
         {% if not editMode %}
             <p>Email: {{ user.email }}</p>
             <a href="{{ path('app_change_email', {'edit': true}) }}">Éditer l'email</a>
-            <a href="{{ path('app_edit_profile', {'edit': true}) }}">Éditer le mot de passe</a>
+            <a href="{{ path('app_edit_password', {'edit': true}) }}">Éditer le mot de passe</a>
         {% else %}
             <form method="post" action="{{ path('app_edit_profile') }}">
                 <label>

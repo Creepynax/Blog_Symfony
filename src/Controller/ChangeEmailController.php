@@ -29,9 +29,8 @@ class ChangeEmailController extends AbstractController
             $emailEmail = $form->get('newEmail')->getData();
             $user->setEmail($emailEmail);
             $entityManager->flush();
-            $this->addFlash('success', 'Votre profil a été mis à jour');
-        } else {
-            $this->addFlash('error', 'Mot de passe actuel incorrect');
+            $this->addFlash('success', 'Votre email a été mis à jour');
+            return $this->redirectToRoute('app_profile');
         }
         return $this->render('change_email/changeEmail.html.twig', [
             'form' => $form->createView(),
