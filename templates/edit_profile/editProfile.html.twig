@@ -1,17 +1,28 @@
 {% block content %}
     <div class="section">
         <div class="content">
-            {{ form_start(form) }}
+            {{ form_start(emailForm) }}
 
-            {{ form_row(form.currentPassword, { label: 'Ancien mot de passe:'}) }}
+            {{ form_row(emailForm.newEmail) }}
 
-            {{ form_row(form.plainPassword.first, { label: 'Nouveau mot de passe:' }) }}
+            <button type="submit" class="button is-fullwidth is-primary">Change Email</button>
+            {{ form_end(emailForm) }}
+        </div>
+    </div>
 
-            {{ form_row(form.plainPassword.second, { label: 'Confirmez le nouveau mot de passe:' }) }}
+    <div class="section">
+        <div class="content">
+            {{ form_start(passwordForm) }}
 
-            <button type="submit" class="button is-fullwidth is-primary">Mettre à jour</button>
-            <a href={{ path('app_profile') }}>Retour au profil</a>
-            {{ form_end(form) }}
+            {{ form_row(passwordForm.currentPassword, { label: 'Current Password:' }) }}
+
+            {{ form_row(passwordForm.plainPassword.first, { label: 'New Password:' }) }}
+
+            {{ form_row(passwordForm.plainPassword.second, { label: 'Confirm New Password:' }) }}
+
+            <button type="submit" class="button is-fullwidth is-primary">Change Password</button>
+            <a href={{ path('app_profile') }}>Back to Profile</a>
+            {{ form_end(passwordForm) }}
         </div>
     </div>
 {% endblock %}
