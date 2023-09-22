@@ -14,8 +14,11 @@
     {% if is_granted('ROLE_USER') %}
         {% if not editMode %}
             <p>Email: {{ user.email }}</p>
-            <a href="{{ path('app_change_email', {'edit': true}) }}"><i class="fas fa-envelope"></i> Éditer l'email</a>
-            <a href="{{ path('app_edit_password', {'edit': true}) }}"><i class="fas fa-user-edit"></i> Éditer le profil</a>
+            <a href="{{ path('app_change_email', {'edit': true}) }}"><i class="fas fa-envelope"></i>Éditer l'email</a>
+            <a href="{{ path('app_edit_password', {'edit': true}) }}"><i class="fas fa-user-edit"></i>Éditer le mot de passe</a>
+            <div class="form-group">
+                <a href="{{ path('app_delete_profile') }}" class="btn btn-danger">Supprimer mon profil</a>
+            </div>
         {% else %}
             <form method="post" action="{{ path('app_edit_profile') }}">
                 {{ form_start(form) }}

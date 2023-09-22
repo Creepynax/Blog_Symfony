@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class ProfileController extends AbstractController
 {
@@ -54,5 +55,18 @@ class ProfileController extends AbstractController
                 'articles' => $articles, // Liste personnalisée des articles de l'utilisateur
             ]);
         }
+    }
+
+    #[Route('/profile/delete', name: 'app_delete_profile')]
+    public function delete(
+        Request $request, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage
+    ): Response {
+        $user = $this->getUser();
+        $entityManager->remove($user);
+        $entityManager->flush();
+        $tokenStorage->setToken(null);
+        $request->getSession()->invalidate();
+        $this->addFlash('success', 'Votre profil a été supprimé');
+        return $this->redirectToRoute('app_home');
     }
 }

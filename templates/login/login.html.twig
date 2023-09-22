@@ -13,7 +13,7 @@
 
             <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" name="_username" value="{{ last_username }}">
+                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" name="_username">
             </div>
 
             <div class="mb-3">
@@ -27,7 +27,7 @@
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
             <input type="hidden" name="_target_path" value="/">
             <button type="submit" class="btn btn-primary">login</button>
-            <a href={{ path('app_register') }} class="btn btn-secondary">Register</a>
+            <a href="{{ path('app_register') }}" class="btn btn-secondary">Register</a>
         </form>
     </div>
 {% endblock %}
