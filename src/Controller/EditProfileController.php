@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use App\Form\ChangeEmailFormType;
 
 class EditProfileController extends AbstractController
@@ -18,11 +17,13 @@ class EditProfileController extends AbstractController
     #[Route('/editProfile', name: 'app_edit_profile')]
     public function index(
         Request $request,
-        TokenStorageInterface $tokenStorage,
         UserPasswordHasherInterface $passwordHasher,
         EntityManagerInterface $entityManager
     ): Response {
-        $user = $tokenStorage->getToken()->getUser();
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        $user = $this->getUser();
         $emailForm = $this->createForm(ChangeEmailFormType::class);
         $emailForm->handleRequest($request);
         $passwordForm = $this->createForm(EditProfileFormType::class, $this->getUser());
