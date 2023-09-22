@@ -1,18 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Créer un Nouveau Tag{% endblock %}
+{% block title %}Créer un Tag{% endblock %}
 
 {% block body %}
     <div class="container mt-4">
-        <h1 class="mb-4">Créer un Nouveau Tag</h1>
-
-        {{ form_start(form) }}
-        <div class="form-group">
-            {{ form_label(form.name, 'Nom du Tag') }}
-            {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
-        </div>
-
-        <button type="submit" class="btn btn-success">Créer</button>
-        {{ form_end(form) }}
+        <h1>Créer un Tag</h1>
+        <form method="post">
+            {{ form_start(form) }}
+            
+            <div class="form-group">
+                {{ form_label(form.name, 'Nom du Tag', {'label_attr': {'class': 'font-weight-bold'}}) }}
+                {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary">Créer</button>
+                <a href="{{ path('tag_index') }}" class="btn btn-secondary">Annuler</a>
+            </div>
+            
+            {{ form_end(form) }}
+        </form>
     </div>
 {% endblock %}

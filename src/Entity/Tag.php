@@ -71,3 +71,4 @@ class Tag
         return $this;
     }
 }
+

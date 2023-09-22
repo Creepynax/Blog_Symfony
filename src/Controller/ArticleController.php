@@ -43,6 +43,9 @@ class ArticleController extends AbstractController
     #[Route('/{id}', name: 'article_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(Article $article): Response
     {
+        // Chargez la relation tags en utilisant la méthode getTags
+        $article->getTags();
+
         // Rend la vue affichant un article spécifique
         return $this->render('article/index.html.twig', [
             'article' => $article,
@@ -111,30 +114,30 @@ class ArticleController extends AbstractController
     {
         // Récupérer l'article par son ID
         $article = $articleRepository->find($id);
-
+    
         if (!$article) {
             throw $this->createNotFoundException("L'article avec l'ID $id n'existe pas.");
         }
-
+    
         // Déterminez si vous êtes en mode mise à jour
         $isUpdate = true;
-
+ 
         // Créer le formulaire de modification
         $form = $this->createForm(ArticleType::class, $article, [
             'is_update' => $isUpdate, // Passez 'is_update' comme option au formulaire
         ]);
-
+    
         // Traiter la soumission du formulaire
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             // Aucun besoin de persister l'article car il est déjà géré par Doctrine
             $entityManager->flush();
-
+    
             $this->addFlash('success', 'Article modifié avec succès.');
             return $this->redirectToRoute('article_index');
         }
-
+  
         return $this->render('article/update.html.twig', [
             'article' => $article,
             'form' => $form->createView(),
@@ -142,6 +145,7 @@ class ArticleController extends AbstractController
     }
 
     #[Route('/delete/{id}', name: 'article_delete', methods: ['POST'])]
+    #[IsGranted("ROLE_USER")]
     public function delete(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
         // Vérifiez si le jeton CSRF est valide (pour éviter les attaques CSRF)
@@ -150,11 +154,11 @@ class ArticleController extends AbstractController
             $entityManager->remove($article);
             $entityManager->flush();
 
-            // Ajoutez un message Flash pour indiquer le succès de la suppression
-            $this->addFlash('success', 'Article supprimé avec succès.');
+        // Ajoutez un message Flash pour indiquer le succès de la suppression
+        $this->addFlash('success', 'Article supprimé avec succès.');
         } else {
-            // Ajoutez un message Flash en cas de jeton CSRF invalide
-            $this->addFlash('error', 'Échec de la suppression de l\'article. Jeton CSRF invalide.');
+        // Ajoutez un message Flash en cas de jeton CSRF invalide
+        $this->addFlash('error', 'Échec de la suppression de l\'article. Jeton CSRF invalide.');
         }
 
         // Redirigez vers la liste des articles après la suppression
