@@ -19,6 +19,7 @@
             <a href="{{ path('app_logout') }}" class="btn btn-secondary">Se déconnecter</a>
         {% endif %}
     </div>
+    <div class="container mt-4">
         {% if articles is not empty %}
             <h2>Mes Articles</h2>
             <table class="table">
@@ -49,5 +50,5 @@
         {% else %}
             <p>Vous n'avez pas encore publié d'articles.</p>
         {% endif %}
-    {% endif %}
+    </div>
 {% endblock %}
