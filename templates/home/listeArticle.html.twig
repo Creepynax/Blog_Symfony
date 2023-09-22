@@ -1,0 +1,50 @@
+<div class="container mt-4">
+    <h1>Liste des Articles</h1>
+
+    <div class="text-right mb-3">
+        {% if is_granted('ROLE_USER') or is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('article_new') }}" class="btn btn-success">Créer un article</a>
+        {% else %}
+            <a href="{{ path('app_register') }}" class="btn btn-success">Créer un article</a>
+        {% endif %}
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Résumé</th>
+            {% if is_granted('ROLE_USER') or is_granted('ROLE_ADMIN') %}
+                <th>Actions</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for article in pagination %}
+            <tr>
+                {% if is_granted('ROLE_USER') or is_granted('ROLE_ADMIN') %}
+                    <td><a href="{{ path('article_show', {'id': article.id}) }}">{{ article.title }}</a></td>
+                    <td>{{ article.summary|slice(0, 140) ~ '(...)' }}</td>
+                    <td>
+                        <a href="{{ path('article_update', {'id': article.id}) }}" class="btn btn-warning fa-solid fa-pen-to-square"></a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <form action="{{ path('article_delete', {'id': article.id}) }}" method="post" style="display: inline;">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+                                <button type="submit" class="btn btn-danger fa fa-trash"></button>
+                            </form>
+                        {% endif %}
+                    </td>
+                {% else %}
+                    <td><a href="{{ path('app_register') }}">{{ article.title }}</a></td>
+                    <td>{{ article.summary|slice(0, 140) ~ '(...)' }}</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+</div>

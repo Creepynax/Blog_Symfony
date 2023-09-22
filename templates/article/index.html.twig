@@ -4,20 +4,26 @@
 
 {% block body %}
 <div class="container mt-4">
-    <h1 class="mb-4">{{ article.title }}</h1>
-
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">{{ article.summary }}</h5>
-            <p class="card-text">{{ article.content }}</p>
-{% if article.image is not empty %}
-    <img src="{{ article.image }}" alt="{{ article.title }}" class="img-thumbnail img-sm">
-{% endif %}
+            <div class="row">
+                <div class="col-md-8">
+                    <h1 class="mb-4">{{ article.title }}</h1>
+                    <h5 class="card-title mb-4">
+                        {{ article.summary }}
+                    </h5>
+                    <p class="card-text">{{ article.content }}</p>
+                </div>
+                <div class="col-md-4">
+                    {% if article.image is not empty %}
+                        <img src="{{ article.image }}" alt="{{ article.title }}" class="img-thumbnail img-sm">
+                    {% endif %}
+                </div>
+            </div>
+            
         </div>
     </div>
-
-    <div class="mt-4">
-        <a href="{{ path('article_index') }}" class="btn btn-primary">Retour à la liste</a>
-    </div>
+    
+    <a href="{{ path('app_home') }}" class="btn btn-secondary mt-3">Retour à la liste</a>
 </div>
 {% endblock %}

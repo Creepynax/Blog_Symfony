@@ -7,13 +7,16 @@
         <h1>Liste des Articles</h1>
         
         <div class="text-right mb-3">
-            <a href="{{ path('article_new') }}" class="btn btn-success">Créer un article</a>
+            {% if is_granted('ROLE_USER') or is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('article_new') }}" class="btn btn-success">Créer un article</a>
+            {% else %}
+                <a href="{{ path('app_register') }}" class="btn btn-success">Créer un article</a>
+            {% endif %}
         </div>
     
         <table class="table">
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Titre</th>
                     <th>Résumé</th>
                     <th>Actions</th>
@@ -22,16 +25,14 @@
             <tbody>
                 {% for article in pagination %}
                     <tr>
-                        <td>{{ article.id }}</td>
-                        <td>{{ article.title }}</td>
+                        <td><a href="{{ path('article_show', {'id': article.id}) }}">{{ article.title }}</a></td>
                         <td>{{ article.summary|slice(0, 140) ~ '(...)' }}</td>
                         <td>
-                            <a href="{{ path('article_show', {'id': article.id}) }}" class="btn btn-primary">Voir</a>
-                            <a href="{{ path('article_edit', {'id': article.id}) }}" class="btn btn-warning">Modifier</a>
+                            <a href="{{ path('article_update', {'id': article.id}) }}" class="btn btn-warning fa-solid fa-pen-to-square"></a>
                             <form action="{{ path('article_delete', {'id': article.id}) }}" method="post" style="display: inline;">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
-                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                                <button type="submit" class="btn btn-danger fa fa-trash"></button>
                             </form>
                         </td>
                     </tr>

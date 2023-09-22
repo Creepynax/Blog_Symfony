@@ -14,13 +14,9 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class EditProfileController extends AbstractController
 {
-    #[Route('/editProfile', name: 'app_edit_profile')]
-    public function index(
-        Request $request,
-        TokenStorageInterface $tokenStorage,
-        UserPasswordHasherInterface $passwordHasher,
-        EntityManagerInterface $entityManager
-    ): Response {
+    #[Route('/editPassword', name: 'app_edit_password')]
+    public function index(Request $request, TokenStorageInterface $tokenStorage, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    {
         $user = $tokenStorage->getToken()->getUser();
         $form = $this->createForm(EditProfileFormType::class, $this->getUser());
         $form->handleRequest($request);
@@ -33,7 +29,9 @@ class EditProfileController extends AbstractController
             if ($passwordHasher->isPasswordValid($user, $currentPassword)) {
                 $user->setPassword($passwordHasher->hashPassword($user, $newPassword));
                 $entityManager->flush();
-                $this->addFlash('success', 'Votre profil a été mis à jour');
+                $this->addFlash('success', 'Votre mot de passe a été mis à jour');
+
+                return $this->redirectToRoute('app_profile');
             } else {
                 $this->addFlash('error', 'Mot de passe actuel incorrect');
             }

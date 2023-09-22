@@ -1,6 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
+    {% for message in app.flashes('message') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+
     <h1>Bienvenue dans le Blog HACH</h1>
+
+    {% include 'home/listeArticle.html.twig' %}
 
 {% endblock %}

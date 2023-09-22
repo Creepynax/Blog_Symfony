@@ -3,6 +3,12 @@
 {% block title %}Mon Profil{% endblock %}
 
 {% block body %}
+    {% for success in app.flashes('success') %}
+        <div class="alert alert-success" role="alert">
+            {{ success }}
+        </div>
+    {% endfor %}
+
     <h1>Mon Profil</h1>
     {% if is_granted('ROLE_USER') %}
         {% if not editMode %}
