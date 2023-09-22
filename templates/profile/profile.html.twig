@@ -19,4 +19,35 @@
             <a href="{{ path('app_logout') }}" class="btn btn-secondary">Se déconnecter</a>
         {% endif %}
     </div>
+        {% if articles is not empty %}
+            <h2>Mes Articles</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Résumé</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for article in articles %}
+                        <tr>
+                            <td><a href="{{ path('article_show', {'id': article.id}) }}">{{ article.title }}</a></td>
+                            <td>{{ article.summary|slice(0, 140) ~ '(...)' }}</td>
+                            <td>
+                                <a href="{{ path('article_update', {'id': article.id}) }}" class="btn btn-warning"><i class="fas fa-pen"></i></a>
+                                <form action="{{ path('article_delete', {'id': article.id}) }}" method="post" style="display: inline;">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+                                    <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Vous n'avez pas encore publié d'articles.</p>
+        {% endif %}
+    {% endif %}
 {% endblock %}

@@ -17,9 +17,10 @@ class EditProfileFormType extends AbstractType
     {
         $builder
             ->add('currentPassword', PasswordType::class, [
-                'invalid_message' => "L'ancien mot de passe est invalide",
                 'attr' => ['class' => 'form-control'],
+                'invalid_message' => "L'ancien mot de passe est invalide",
                 'mapped' => false,
+                'required' => false,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez entrer votre mot de passe actuel',
@@ -39,13 +40,12 @@ class EditProfileFormType extends AbstractType
                     new Length([
                         'min' => 8,
                         'minMessage' => 'Le mot de passe doit faire au moins {{ limit }} caractères',
-                        'max' => 30,
+                        'max' => 255,
                     ])
                 ],
             ])
         ;
     }
-
 
     public function configureOptions(OptionsResolver $resolver): void
     {

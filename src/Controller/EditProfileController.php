@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class EditProfileController extends AbstractController
@@ -32,10 +33,9 @@ class EditProfileController extends AbstractController
                 $user->setPassword($passwordHasher->hashPassword($user, $newPassword));
                 $entityManager->flush();
                 $this->addFlash('success', 'Votre mot de passe a été mis à jour');
-
                 return $this->redirectToRoute('app_profile');
             } else {
-                $this->addFlash('error', 'Mot de passe actuel incorrect');
+                $form->get('currentPassword')->addError(new FormError("L'ancien mot de passe est invalide."));
             }
         }
 
