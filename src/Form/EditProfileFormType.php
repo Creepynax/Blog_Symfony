@@ -18,28 +18,28 @@ class EditProfileFormType extends AbstractType
         $builder
             ->add('currentPassword', PasswordType::class, [
                 'attr' => ['class' => 'form-control'],
-                'invalid_message' => "L'ancien mot de passe est invalide.",
+                'invalid_message' => "L'ancien mot de passe est invalide",
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter your current password',
+                        'message' => 'Veuillez entrer votre mot de passe actuel',
                     ]),
                 ],
             ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'attr' => ['class' => 'form-control'],
-                'invalid_message' => 'Les mots de passe ne correspondent pas.',
+                'invalid_message' => 'Les mots de passe ne correspondent pas',
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a new password',
+                        'message' => 'Veuillez entrer un nouveau mot de passe',
                     ]),
                     new Length([
                         'min' => 8,
-                        'minMessage' => 'Le mot de passe doit faire au moins {{ limit }} caractères.',
+                        'minMessage' => 'Le mot de passe doit faire au moins {{ limit }} caractères',
                         'max' => 255,
                     ])
                 ],

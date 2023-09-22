@@ -12,9 +12,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class EditProfileController extends AbstractController
 {
+    #[IsGranted('ROLE_USER', statusCode: 403)]
     #[Route('/editPassword', name: 'app_edit_password')]
     public function index(Request $request, TokenStorageInterface $tokenStorage, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
     {
@@ -37,7 +39,7 @@ class EditProfileController extends AbstractController
             }
         }
 
-        return $this->render('edit_profile/editProfile.html.twig', [
+        return $this->render('profile/editProfile.html.twig', [
             'form' => $form->createView(),
         ]);
     }
