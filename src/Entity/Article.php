@@ -134,6 +134,11 @@ class Article
         return $this;
     }
 
+    public function getUserId(): ?int
+    {
+        return $this->user ? $this->user->getId() : null;
+    }
+
     /**
      * @return Collection<int, Tag>
      */

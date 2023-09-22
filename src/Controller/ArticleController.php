@@ -14,7 +14,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Knp\Component\Pager\PaginatorInterface;
 use App\Repository\ArticleRepository;
 
-
 #[Route('/article')]
 class ArticleController extends AbstractController
 {
@@ -42,16 +41,16 @@ class ArticleController extends AbstractController
     }
 
     #[Route('/{id}', name: 'article_show', methods: ['GET'], requirements: ['id' => '\d+'])]
-public function show(Article $article): Response
-{
-    // Chargez la relation tags en utilisant la méthode getTags
-    $article->getTags();
+    public function show(Article $article): Response
+    {
+        // Chargez la relation tags en utilisant la méthode getTags
+        $article->getTags();
 
-    // Rend la vue affichant un article spécifique
-    return $this->render('article/index.html.twig', [
-        'article' => $article,
-    ]);
-}
+        // Rend la vue affichant un article spécifique
+        return $this->render('article/index.html.twig', [
+            'article' => $article,
+        ]);
+    }
 
     #[Route('/new', name: 'article_new', methods: ['GET', 'POST'])]
     #[IsGranted("ROLE_USER")] // Assurez-vous que l'utilisateur est authentifié pour créer un article
@@ -122,7 +121,7 @@ public function show(Article $article): Response
     
         // Déterminez si vous êtes en mode mise à jour
         $isUpdate = true;
-    
+ 
         // Créer le formulaire de modification
         $form = $this->createForm(ArticleType::class, $article, [
             'is_update' => $isUpdate, // Passez 'is_update' comme option au formulaire
@@ -138,7 +137,7 @@ public function show(Article $article): Response
             $this->addFlash('success', 'Article modifié avec succès.');
             return $this->redirectToRoute('article_index');
         }
-    
+  
         return $this->render('article/update.html.twig', [
             'article' => $article,
             'form' => $form->createView(),
@@ -147,7 +146,6 @@ public function show(Article $article): Response
 
     #[Route('/delete/{id}', name: 'article_delete', methods: ['POST'])]
     #[IsGranted("ROLE_USER")]
-
     public function delete(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
         // Vérifiez si le jeton CSRF est valide (pour éviter les attaques CSRF)

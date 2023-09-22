@@ -7,7 +7,11 @@
         <h1>Liste des Articles</h1>
         
         <div class="text-right mb-3">
-            <a href="{{ path('article_new') }}" class="btn btn-success">Créer un article</a>
+            {% if is_granted('ROLE_USER') or is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('article_new') }}" class="btn btn-success">Créer un article</a>
+            {% else %}
+                <a href="{{ path('app_register') }}" class="btn btn-success">Créer un article</a>
+            {% endif %}
         </div>
     
         <table class="table">
