@@ -10,43 +10,25 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Form\ChangeEmailFormType;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class EditProfileController extends AbstractController
 {
     #[Route('/editProfile', name: 'app_edit_profile')]
     public function index(
         Request $request,
+        TokenStorageInterface $tokenStorage,
         UserPasswordHasherInterface $passwordHasher,
         EntityManagerInterface $entityManager
     ): Response {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
-        $user = $this->getUser();
-        $emailForm = $this->createForm(ChangeEmailFormType::class);
-        $emailForm->handleRequest($request);
-        $passwordForm = $this->createForm(EditProfileFormType::class, $this->getUser());
-        $passwordForm->handleRequest($request);
+        $user = $tokenStorage->getToken()->getUser();
+        $form = $this->createForm(EditProfileFormType::class, $this->getUser());
+        $form->handleRequest($request);
 
-        if ($emailForm->isSubmitted() && $emailForm->isValid()) {
-            $newEmail = $emailForm->get('newEmail')->getData();
-
-            $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $newEmail]);
-            if (!$existingUser) {
-                $user->setEmail($newEmail);
-                $entityManager->flush();
-                $this->addFlash('success', 'Your email address has been updated');
-            } else {
-                $this->addFlash('error', 'This email address is already in use');
-            }
-        }
-
-        if ($passwordForm->isSubmitted() && $passwordForm->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             /** @var User $user */
-            $user = $passwordForm->getData();
-            $currentPassword = $passwordForm->get('currentPassword')->getData();
-            $newPassword = $passwordForm->get('plainPassword')->get('first')->getData();
+            $currentPassword = $form->get('currentPassword')->getData();
+            $newPassword = $form->get('plainPassword')->get('first')->getData();
 
             if ($passwordHasher->isPasswordValid($user, $currentPassword)) {
                 $user->setPassword($passwordHasher->hashPassword($user, $newPassword));
@@ -58,8 +40,7 @@ class EditProfileController extends AbstractController
         }
 
         return $this->render('edit_profile/editProfile.html.twig', [
-            'emailForm' => $emailForm->createView(),
-            'passwordForm' => $passwordForm->createView(),
+            'form' => $form->createView(),
         ]);
     }
 }

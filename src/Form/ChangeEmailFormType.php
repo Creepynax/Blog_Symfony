@@ -1,12 +1,13 @@
 <?php
 
-// src/Form/ChangeEmailFormType.php
 namespace App\Form;
 
+use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ChangeEmailFormType extends AbstractType
 {
@@ -14,12 +15,19 @@ class ChangeEmailFormType extends AbstractType
     {
         $builder
             ->add('newEmail', EmailType::class, [
-                'label' => 'New Email Address',
+                'mapped' => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Entrez un email',
+                    ]),
+                ],
             ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([]);
+        $resolver->setDefaults([
+            'data_class' => User::class,
+        ]);
     }
 }

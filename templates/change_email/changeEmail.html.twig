@@ -3,11 +3,7 @@
         <div class="content">
             {{ form_start(form) }}
 
-            {{ form_row(form.currentPassword, { label: 'Ancien mot de passe:'}) }}
-
-            {{ form_row(form.plainPassword.first, { label: 'Nouveau mot de passe:' }) }}
-
-            {{ form_row(form.plainPassword.second, { label: 'Confirmez le nouveau mot de passe:' }) }}
+            {{ form_row(form.newEmail, { label: 'Changez votre email:' }) }}
 
             <button type="submit" class="button is-fullwidth is-primary">Mettre à jour</button>
             <a href={{ path('app_profile') }}>Retour au profil</a>
