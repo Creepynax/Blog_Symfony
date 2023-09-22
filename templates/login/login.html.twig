@@ -3,7 +3,7 @@
 {% block body %}
     <div class="container mt-4">
 
-        <h1>Login</h1>
+        <h1>Connexion</h1>
 
         {% if error %}
             <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -12,22 +12,22 @@
         <form action="{{ path('app_login') }}" method="post">
 
             <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Email address</label>
+                <label for="exampleFormControlInput1" class="form-label">Email</label>
                 <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" name="_username" value="{{ last_username }}">
             </div>
 
             <div class="mb-3">
-                <label for="inputPassword5" class="form-label">Password</label>
+                <label for="inputPassword5" class="form-label">Mot de passe</label>
                 <input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock" name="_password">
                 <div id="passwordHelpBlock" class="form-text">
-                    Your password must be 8-255 characters long.
+                    Le mot de passe doit contenir entre 8 et 30 caractères
                 </div>
             </div>
 
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
             <input type="hidden" name="_target_path" value="/">
-            <button type="submit" class="btn btn-primary">login</button>
-            <a href={{ path('app_register') }} class="btn btn-secondary">Register</a>
+            <button type="submit" class="btn btn-primary">Connexion</button>
+            <a href={{ path('app_register') }} class="btn btn-secondary">Inscription</a>
         </form>
     </div>
 {% endblock %}

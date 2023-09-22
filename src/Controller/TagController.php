@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\TagRepository;
 
-#[Route('/tag')]
+#[Route('/admin/tag')]
 class TagController extends AbstractController
 {
     #[Route('/list', name: 'tag_index', methods: ['GET'])]
@@ -53,7 +53,7 @@ class TagController extends AbstractController
             $entityManager->flush();
 
             // Ajouter un message Flash pour indiquer le succès
-            $this->addFlash('success', 'Tag créé avec succès.');
+            $this->addFlash('success', 'Tag créé avec succès');
 
             // Redirige vers la liste des tags après la création
             return $this->redirectToRoute('tag_index');
@@ -75,6 +75,8 @@ class TagController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush(); // Utilisez le gestionnaire d'entité correct
 
+            $this->addFlash('success', 'Tag modifié avec succès');
+
             return $this->redirectToRoute('tag_index');
         }
 
@@ -95,10 +97,10 @@ class TagController extends AbstractController
             $entityManager->flush();
 
             // Ajoutez un message Flash pour indiquer le succès de la suppression
-            $this->addFlash('success', 'Tag supprimé avec succès.');
+            $this->addFlash('success', 'Tag supprimé avec succès');
         } else {
             // Ajoutez un message Flash en cas de jeton CSRF invalide
-            $this->addFlash('error', 'Échec de la suppression du tag. Jeton CSRF invalide.');
+            $this->addFlash('error', 'Échec de la suppression du tag. Jeton CSRF invalide');
         }
 
         // Redirigez vers la liste des tags après la suppression

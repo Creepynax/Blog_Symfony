@@ -3,6 +3,7 @@
 {% block title %}Mon Profil{% endblock %}
 
 {% block body %}
+
     {% for success in app.flashes('success') %}
         <div class="alert alert-success" role="alert">
             {{ success }}
@@ -16,8 +17,6 @@
             <a href="{{ path('app_change_email') }}" class="btn btn-primary">Modifier l'email</a>
             <a href="{{ path('app_edit_password') }}" class="btn btn-danger">Modifier le mot de passe</a>
             <a href="{{ path('app_logout') }}" class="btn btn-secondary">Se déconnecter</a>
-        {% else %}
-            <p>Veuillez vous connecter pour accéder à votre profil.</p>
         {% endif %}
     </div>
 {% endblock %}

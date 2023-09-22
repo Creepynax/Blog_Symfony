@@ -2,6 +2,7 @@
 
 {% block body %}
     <div class="container mt-4">
+
         <h1>Modification de l'email</h1>
 
         {{ form_start(form) }}
@@ -10,6 +11,7 @@
             {{ form_row(form.newEmail, { label: 'Changez votre email:' }) }}
         </div>
 
+        <input type="hidden" name="_target_path" value="/profile">
         <button type="submit" class="btn btn-primary">Mettre à jour</button>
         <a href={{ path('app_profile') }} class="btn btn-secondary">Retour au profil</a>
         {{ form_end(form) }}
